@@ -23,17 +23,6 @@ export const useTodoFormManager = (initialTitle = '') => {
     }
   }, [isInputDisabled]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!title || isOnlyWhiteSpace(title)) {
-      showError(TodoErrors.title);
-      return;
-    }
-
-    handleAddTodo();
-  };
-
   const handleAddTodo = async () => {
     setInputDisabled(true);
 
@@ -72,6 +61,17 @@ export const useTodoFormManager = (initialTitle = '') => {
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!title || isOnlyWhiteSpace(title)) {
+      showError(TodoErrors.title);
+      return;
+    }
+
+    handleAddTodo();
   };
 
   return {

@@ -56,19 +56,14 @@ export const useTodos = (showError: (err: TodoErrors) => void) => {
   const deleteCompletedTodos = async () => {
     const completedTodos = getCompletedTodos(todos);
 
-    try {
-      const res = await Promise.all(
-        completedTodos.map(({ id }) => deleteTodo(id)),
-      );
+    const res = await Promise.all(
+      completedTodos.map(({ id }) => deleteTodo(id)),
+    );
 
-      const todoIds = validTodoIds(res);
+    const todoIds = validTodoIds(res);
 
-      if (!!validTodoIds.length) {
-        setTodos(revomesTodosById(todos, todoIds));
-      }
-    } catch (err) {
-      // eslint-disabled-next-line no-console
-      console.log(err);
+    if (!!validTodoIds.length) {
+      setTodos(revomesTodosById(todos, todoIds));
     }
   };
 
@@ -76,14 +71,11 @@ export const useTodos = (showError: (err: TodoErrors) => void) => {
     try {
       const updatedTodo: Todo = await todoApi.updateTodo(todo, todo.id);
 
-      setTodos(prevState => {
-        const updatedTodo = [...prevState];
-        const index = todos.findIndex(({ id }) => id === todo.id);
-
-        updatedTodo.splice(index, 1, todo);
-
-        return updatedTodo;
-      });
+      setTodos(prevState =>
+        prevState.map(existingTodo =>
+          existingTodo.id === todo.id ? todo : existingTodo,
+        ),
+      );
 
       return updatedTodo;
     } catch {
@@ -98,27 +90,22 @@ export const useTodos = (showError: (err: TodoErrors) => void) => {
       ? updateTodosCompleted(getInCompletedTodos(todos))
       : updateTodosCompleted(todos);
 
-    try {
-      const res = await Promise.all(newTodos.map(todo => updateTodo(todo)));
+    const res = await Promise.all(newTodos.map(todo => updateTodo(todo)));
 
-      const updatedTodos = validUpdatedTodos(res);
+    const updatedTodos = validUpdatedTodos(res);
 
-      if (!!updatedTodos.length) {
-        setTodos(prevState => {
-          const updatedState = prevState.map(todo => {
-            const updatedTodo = updatedTodos.find(
-              updated => updated.id === todo.id,
-            );
+    if (!!updatedTodos.length) {
+      setTodos(prevState => {
+        const updatedState = prevState.map(todo => {
+          const updatedTodo = updatedTodos.find(
+            updated => updated.id === todo.id,
+          );
 
-            return updatedTodo ? updatedTodo : todo;
-          });
-
-          return updatedState;
+          return updatedTodo ? updatedTodo : todo;
         });
-      }
-    } catch (err) {
-      // eslint-disabled-next-line no-console
-      console.log(err);
+
+        return updatedState;
+      });
     }
   };
 

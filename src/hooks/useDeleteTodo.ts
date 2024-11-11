@@ -3,16 +3,16 @@ import { useContext, useState } from 'react';
 import { TodosContext } from '../context/TodoContext';
 
 export const useDeleteTodo = () => {
-  const [isDeleting, setDeliting] = useState(false);
+  const [isDeleting, setDeleting] = useState(false);
   const { deleteCompletedTodos, onFocus, deleteTodo } =
     useContext(TodosContext);
 
   const handleDeleteTodo = async (id: number) => {
-    setDeliting(true);
+    setDeleting(true);
 
     await deleteTodo(id);
 
-    setDeliting(false);
+    setDeleting(false);
     onFocus();
   };
 

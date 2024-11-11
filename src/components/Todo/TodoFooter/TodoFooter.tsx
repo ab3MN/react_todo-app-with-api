@@ -22,14 +22,14 @@ export const TodoFooter: FC<TodoFooterProps> = ({
   setStatus,
   status,
 }) => {
-  const inColpmetedTodoCounter = getInCompletedTodos(todos).length;
+  const isCompletedTodoCounter = getInCompletedTodos(todos).length;
   const { handleDeleteCompletedTodos } = useDeleteTodo();
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {inColpmetedTodoCounter}
-        {inColpmetedTodoCounter === 1 ? ' item ' : ' items '}
+        {isCompletedTodoCounter}
+        {isCompletedTodoCounter === 1 ? ' item ' : ' items '}
         left
       </span>
 
